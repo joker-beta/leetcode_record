@@ -3,7 +3,7 @@
 
 一般地，对于一维LIS问题，若要计算序列arr中满足某个条件P的最长子序列长度，我们构造
 ```math
-$dp = [0 for _ in range(len(arr))]$
+dp = [0 for _ in range(len(arr))]
 ```
 其中dp[i]表示以arr[i]结尾，满足条件P的最长子序列长度。
 那么进一步根据条件P的具体要求来推到状态转移方程。
