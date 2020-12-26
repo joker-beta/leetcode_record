@@ -48,16 +48,15 @@ class Solution_2:
             return 1
         # 统计回文串的个数
         self.ans = 0
-        n = len(s)
         # 对每个位置依次利用中心扩散法统计回文串的个数
-        for i in range(n):
-            self.fun(s, n, i, i)    # 统计长度为奇数的回文串，回文串中心为s[i]
-            self.fun(s, n, i, i+1)  # 统计长度为偶数的回文串，回文串中心为空字符
+        for i in range(len(s)):
+            self.fun(s, i, i)    # 统计长度为奇数的回文串，回文串中心为s[i]
+            self.fun(s, i, i+1)  # 统计长度为偶数的回文串，回文串中心为空字符
         return self.ans
 
-    def fun(self, s, n, left, right):
+    def fun(self, s, left, right):
         """统计字符s[left],...,s[right]内回文串个数"""
-        while (left >= 0 and right < n) and (s[left] == s[right]):
+        while (left >= 0 and right < len(s)) and (s[left] == s[right]):
             # 中心扩散，left，right往两边走
             left -= 1
             right += 1
