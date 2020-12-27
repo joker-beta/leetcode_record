@@ -48,19 +48,18 @@ dp[i][j] = dp[i-1][j-w[i-1]] + v[i-1]
 所以，我们将上面描述的过程用代码实现如下
 ```python
 def fun(w, n, wt, val):
-	   # dp[i][j] 表示前i个物品，当背包重量为j时，所能装下的最大价值
-	   dp = [[0 for j in range(n + 1)] for i in range(w + 1)]
-    
-	   for i in range(1, n + 1):
-		      for j in range(1, w + 1):
-			     # 当前背包容量装不下，只能选择不装入背包
-			     if (j - w[i-1]) < 0:
-  				     dp[i][j] = dp[i - 1][j]
-		   	  # 若当前背包容量j能装下第i个物品的重量w[i-1]，
-        # 那么考虑装入或者不装入背包两种状况，然后选择价值最大的情况
-			     else:
-				       dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w[i - 1]] + v[i - 1])				
-	  return dp[n][w] 
+    # dp[i][j] 表示前i个物品，当背包重量为j时，所能装下的最大价值
+    dp = [[0 for j in range(n + 1)] for i in range(w + 1)]
+    for i in range(1, n + 1):
+	for j in range(1, w + 1):
+	    # 当前背包容量装不下，只能选择不装入背包
+	    if (j - w[i-1]) < 0:
+	       dp[i][j] = dp[i - 1][j]
+	    # 若当前背包容量j能装下第i个物品的重量w[i-1]，
+            # 那么考虑装入或者不装入背包两种状况，然后选择价值最大的情况
+	    else:
+	       dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w[i - 1]] + v[i - 1])				
+   return dp[n][w]
 ```
   
 #### 2，完全背包
