@@ -84,6 +84,19 @@ dp[j] = max(dp[j], dp[j - C_i] + W_i)
 
 
 #### 3，多重背包
+[特点]：第`i`种物品总共有`M_i`件，而不是完全背包的可以取无限件。
+
+但是，对于状态转移方程可以写出类似的形式
+```python
+# dp[i][j] = max(dp[i-1][j], dp[i - 1][j - C_i] + W_i, ..., dp[i - 1][j - M_i*C_i] + M_i*W_i)	  
+           = max(dp[i-1][j], a[i-1][M_i-1], dp[i - 1][j - M_i*C_i] + M_i*W_i)
+for i in range(N):
+  for j in range(V):
+    for k in range(M_i):  # 这里的M_i，W_i，C_i是形式上的写法，具体的值根据问题来确定
+      dp[i][j] = max(dp[i][j], dp[i-1][j - k*C_i] + k*W_i)
+```
+由上面的代码分析，可以知道时间复杂度为`O(N*V*sum_{i}M_i)`，所以我们考虑将问题进行简化，一般考虑从dp[i][j]相邻的项来进行分析，试着找出递推关系。
+
 
 
 #### 4，混合三种背包
