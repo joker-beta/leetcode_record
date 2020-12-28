@@ -83,4 +83,64 @@ ans_min = Solution_1().max_min(arr, lambda x, y: x <= y)   # 单调递增队列 
 ans_max = Solution_1().max_min(arr, lambda x, y: x >= y)   # 单调递减队列 -> 找最大值
 ```
 
+##### 2，非固定窗口大小
+这种情况下，我们还是手动模拟窗口滑动过程，算法的逻辑如下
+```python
+# 设置双指针，都从首位置开始遍历
+left, right = 0, 0
+while right < len(arr):    # arr表示给定的数组，字符串等
+  # 增大窗口，也就是窗口右边界right右移
+  window.append(arr[right])
+  right += 1
+  # 判断当前窗口是否应该收缩
+  while (left < right) and (其他判断条件):
+    # 缩小
+    window.remove(arr[left])
+    left += 1
+    
+  (进行元素处理，比如统计，计算，对比等操作...)
+```
+这个算法逻辑的时间复杂度是`O(n)`，`n`是数组`arr`的长度，比一般的暴力遍历效率要高。
 
+但是，在上面的算法框架中，还有一些细节问题没有处理，比如
+* 怎么向窗口中添加新元素？
+* 怎么缩小窗口？
+* 在窗口滑动的哪个阶段更新结果？
+* 出现`bug`后，怎么查找比较有效？
+* ......
+
+下面，我们对上面的框架补充点细节处理代码，以字符串输入为例
+```python
+def slidingWindow(s: string, t: string):
+  need = {}    # 需要在字符串中处理的各字符的个数
+  window = {}  # 记录当前的遍历的窗口
+  # 在need中统计字符串t中各字符个数
+  # 同时将window中在t中出现的各字符串个数初始化为0，便于接下来遍历记录
+  for num in t:
+    need[c] += 1
+    window[c] = 0
+  # 设置双指针
+  left, right = 0, 0 
+  # 设置为在当前窗口中已经处理的need中对应字符的个数
+  valid = 0
+  
+  # 开始进行窗口滑动
+  while right < len(s):
+    # 将是s[right]移入当前窗口
+    c = s[right]
+    right += 1   # 窗口右边界右移
+    # 对窗口内数据进行更新
+    ......
+    
+    # debug 输出位置
+    print('window: [%d, %d)', left, right)
+    
+    # 判断当前窗口是否需要收缩
+    while (left <right) and (其他判断条件):
+      # 将s[left]移除当前窗口
+      d = s[left]
+      left += 1
+      # 对窗口内数据进行更新
+      ......
+```
+上面框架中`......`分别表示对窗口左右移动过程进行相应处理更新，在实际中几乎是对称的操作。
