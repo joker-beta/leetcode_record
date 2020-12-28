@@ -120,11 +120,11 @@ dp[i - 1][j - k*vi] + k*wi, (0 <= k <= si)
 ```
 那么取当前第`i`种物品，背包中增加的重量为下面二进制分组后列表中的一个
 ```python
- [2^0 * goods[i][0], 2^1 * goods[i][0], 2^2 * goods[i][0], ..., 2^mi * goods[i][0], (si-2^0-2^1-...-2^mi) * goods[i][0]]
+[2^0 * goods[i][0], 2^1 * goods[i][0], 2^2 * goods[i][0], ..., 2^mi * goods[i][0], (si-2^0-2^1-...-2^mi) * goods[i][0]]
 ```
 同样地，那么取当前第`i`种物品，获得的价值也是下面二进制分组后列表中的一个
 ```python
-    [2^0 * goods[i][1], 2^1 * goods[i][1], 2^2 * goods[i][1], ..., 2^mi * goods[i][1], (si-2^0-2^1-...-2^mi) * goods[i][1]]
+[2^0 * goods[i][1], 2^1 * goods[i][1], 2^2 * goods[i][1], ..., 2^mi * goods[i][1], (si-2^0-2^1-...-2^mi) * goods[i][1]]
 ```
 其中`i = 0, 1, ..., N-1`。
 
@@ -169,7 +169,7 @@ def fun(N, V, goods):
 
 这里，我们根据一般多重背包问题的分析知道状态方程为
 ```python
-     F[i, j] = max{F[i - 1, j - k*vi] + k*wi: 0 <= k <= si, 0 < j - k*ci}
+F[i, j] = max{F[i - 1, j - k*vi] + k*wi: 0 <= k <= si, 0 < j - k*ci}
 ```
 * 在`AcWing-4`中，由于数据范围较小我们直接通过循环嵌套进行处理。
 * 在`AcWing-5`中，数据范围变大一些，我们通过对`si`进行二进制分组的策略，将总的时间复杂度降低了。
@@ -177,48 +177,47 @@ def fun(N, V, goods):
 
 注意到上面的方程可以化简为一维形式
 ```python
-      f[j] = max{f[j - k*ci] + k*wi: 0 <= k <= si, 0 < j - k*ci}
+f[j] = max{f[j - k*ci] + k*wi: 0 <= k <= si, 0 < j - k*ci}
 ```
 发现`f[j]`仅仅依赖`f[j - k*ci]`，按照依赖性对`f[j]`进行`模ci`分组。
-
-[数学推导]：
 ```math
-     f[j + p*ci] = max{f[j + k*ci] + (p-k)*wi: 0 <= k <= p}
+[数学推导]：
+              f[j + p*ci] = max{f[j + k*ci] + (p-k)*wi: 0 <= k <= p}
  ==>   f[j + p*ci] - p*wi = max{f[j + k*ci] - k*wi: 0 <= k <= p}
 ```
 那么我们将 `f[j + p*ci] - p*wi` 转换成了标准的滑动窗口单调队列形式，即
 ```python
-                  f[x] - (x - j)/ci * wi，
+f[x] - (x - j)/ci * wi，
 ```
 对于 `x = j + p*ci` 构成单调队列。主要代码如下，
 ```python
-    def fun(N, V, goods):
-        # 设置单调队列
-        q = deque()
-        dp = [0 for _ in range(V + 1)]
-        # 对N种物品进行迭代
-        for i in range(N):
-            [vi, wi, si] = goods[i]
-            # 对当前物品goods[i]的各重量迭代
-            for j in range(vi):
-                # 每次新的循环都需要初始化队列
-                # 由于这里用单调队列对每种物品的重量进行滑动窗口操作
-                q.clear()
-                nums = (V - j) // vi  # 剩余的空间最多还能放几个当前物品
-                for k in range(nums + 1):
-                    val = dp[j + k*vi] - k*wi
-                    # 1，若当前队列非空，并且队尾元素记录的元素小于等于当前元素val
-                    #    那么为了使得队列存放的数呈现递减趋势，需要将队尾元素删除
-                    while q and q[-1][1] <= val:
-                        q.pop()
-                    # 2，否则，继续往队列中添加元素
-                    q.append([k, val])
+def fun(N, V, goods):
+    # 设置单调队列
+    q = deque()
+    dp = [0 for _ in range(V + 1)]
+    # 对N种物品进行迭代
+    for i in range(N):
+        [vi, wi, si] = goods[i]
+        # 对当前物品goods[i]的各重量迭代
+        for j in range(vi):
+            # 每次新的循环都需要初始化队列
+            # 由于这里用单调队列对每种物品的重量进行滑动窗口操作
+            q.clear()
+            nums = (V - j) // vi  # 剩余的空间最多还能放几个当前物品
+            for k in range(nums + 1):
+                val = dp[j + k*vi] - k*wi
+                # 1，若当前队列非空，并且队尾元素记录的元素小于等于当前元素val
+                #    那么为了使得队列存放的数呈现递减趋势，需要将队尾元素删除
+                while q and q[-1][1] <= val:
+                    q.pop()
+                # 2，否则，继续往队列中添加元素
+                q.append([k, val])
 
-                    # 存放的个数不能超出物品数量，否则将元素弹出
-                    if q[0][0] < k - si:
-                        q.popleft()
-                    dp[j + k*vi] = q[0][1] + k*wi
-        return dp[V]
+                # 存放的个数不能超出物品数量，否则将元素弹出
+                if q[0][0] < k - si:
+                    q.popleft()
+                dp[j + k*vi] = q[0][1] + k*wi
+    return dp[V]
 ```
 
 
