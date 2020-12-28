@@ -24,6 +24,11 @@
             4 5 2
 [输出样例]：
             10
+
+[参考]：
+(python版本)：https://www.acwing.com/solution/content/15198/
+https://www.acwing.com/solution/content/15671/
+https://www.acwing.com/solution/content/1537/
 """
 
 # [思路]：我们根据一般多重背包问题的分析知道状态转移方程为
