@@ -28,7 +28,9 @@ class Solution:
         # 设置窗口左右边界
         left, right = 0, 0
         start = 0   # start 记录最小子串的起始位置
-        valid = 0  # 记录要达到要求的各字符个数
+        # 记录当前窗口中满足统计个数要求的字符个数
+        # 例如，need中c字符个数为nc,若当前窗口中c字符个数达到nc个,那么valid+1
+        valid = 0
         Len = len(s) + len(t)  # 记录最小窗口长度，用于更新
 
         # 开始滑动窗口
