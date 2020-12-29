@@ -1,18 +1,23 @@
 # -*- coding:utf-8 -*-
-""" leetcode-76. 最小覆盖子串 (困难)
+""" leetcode-567. 字符串的排列 (困难)
 [题目]：
-        给你一个字符串 S、一个字符串 T`。
-        请你设计一种算法，可以在 O(n)的时间复杂度内，从字符串 S 里面找出：
-        包含 T 所有字符的最小子串。
+        给定两个字符串 `s1` 和 `s2`，写一个函数来判断 `s2` 是否包含 `s1` 的排列。
+        换句话说，第一个字符串的排列之一是第二个字符串的子串。
 
-示例：
-	输入：S = "ADOBECODEBANC", T = "ABC"
-	输出："BANC"
+示例1:
+	输入: s1 = "ab" s2 = "eidbaooo"
+	输出: True
+	解释: s2 包含 s1 的排列之一 ("ba"). 
 
-提示：
-* 如果 S 中不存这样的子串，则返回空字符串 ""。
-* 如果 S 中存在这样的子串，我们保证它是唯一的答案。
+示例2:
+	输入: s1= "ab" s2 = "eidboaoo"
+	输出: False
+
+注意：
+* 输入的字符串只包含小写字母
+* 两个字符串的长度都在 `[1, 10,000]` 之间
 """
+
 
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
@@ -23,7 +28,7 @@ class Solution:
         # 初始化各字符出现的个数
         for i in t:
             window[i] = 0
-            need[i] = t.count(i)
+            need[i] += 1
 
         # 设置窗口左右边界
         left, right = 0, 0
@@ -61,12 +66,3 @@ class Solution:
                     window[cout] -= 1
 
         return '' if Len >= len(s) else s[start: start + Len]
-
-if __name__ == '__main__':
-    while True:
-        try:
-            s = input()
-            t = input()
-            print(Solution().minWindow(s, t))
-        except:
-            break
