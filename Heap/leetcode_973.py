@@ -20,7 +20,7 @@ class Solution:
         for i, [x, y] in enumerate(points):
             hq.heappush(h, (x**2 + y**2, i))
         ans = []
-        while h:
+        for _ in range(k):
             ans.append(points[hq.heappop(h)[1]])
         return ans
 
